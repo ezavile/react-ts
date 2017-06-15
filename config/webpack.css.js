@@ -17,15 +17,10 @@ const postcssRulesUse = [
         require('rucksack-css'),
         require('postcss-modules')({
           getJSON: (cssFileName, json) => {
-            if (cssFileName.includes('.postcss')) {
-              const dirname = path.dirname(cssFileName);
-              const componentName = path.basename(cssFileName, '.postcss');
-              const content = require('../lib/ts-classname')(componentName, json);
-              const classHash  = path.resolve(`${dirname}/${componentName}.ts`);
-              fs.writeFile(classHash, content, (err) => {
-                if (err) throw new Error(error);
-              });
-            }
+            require('postcss-typescript-css')({
+                cssFileName,
+                content: json,
+            })();
           }
         }),
       ])
